@@ -28,7 +28,6 @@ bundle:
 
 ```html
 <script src="https://telegram.org/js/telegram-web-app.js?59"></script>
-<script type="module" src="/main.ts"></script>
 ```
 When running outside Telegram (local dev, unit tests), you must provide your own mock via setSource.
 
