@@ -1,5 +1,7 @@
 import { IWebApp } from './types'
 
+export type * from './types'
+
 /**
  * Custom error indicating that the Telegram WebApp instance is not available.
  */
@@ -11,7 +13,7 @@ export class TelegramWebAppUnavailableError extends Error {
   }
 }
 
-type Source = Record<string, any>;
+type Source = Record<string, any>
 
 /**
  * Internal reference for an injected source (useful for testing or mocking)
