@@ -91,7 +91,7 @@ afterEach(() => setSource(null));
 
 Clean + compile TypeScript (`tsconfig.prod.json`) + copy `types.d.ts`:
 ```bash
-- bun run build
+bun run build
 ```
 
 Consumers normally install from npm, but you can build locally to inspect the bundle.
