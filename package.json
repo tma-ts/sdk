@@ -9,7 +9,10 @@
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.2.6",
+    "ajv": "^8.17.1",
     "prettier": "^3.6.2",
+    "tsup": "^8.5.0",
     "turbo": "^2.5.8",
     "typescript": "5.9.2"
   },

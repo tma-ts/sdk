@@ -1,0 +1,59 @@
+{
+  "name": "@tma-ts/sdk",
+  "version": "9.1.12",
+  "private": false,
+  "description": "TypeScript SDK that removes the friction of integrating Telegram Mini Apps",
+  "keywords": [
+    "telegram",
+    "telegram typescript",
+    "telegram-mini-app",
+    "telegram-mini-apps",
+    "telegram-web-app",
+    "telegram-web-apps",
+    "webapp",
+    "sdk",
+    "tma"
+  ],
+  "homepage": "https://github.com/tma-ts/sdk#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tma-ts/sdk.git"
+  },
+  "license": "MIT",
+  "author": "Andrey Reznik",
+  "scripts": {
+    "build": "rimraf ./dist && tsup src/index.ts --format esm --dts",
+    "prepublishOnly": "bun run build",
+    "format-and-lint": "biome check .",
+    "format-and-lint:fix": "biome check . --write"
+  },
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "default": "./dist/index.mjs",
+      "types": "./dist/index.d.mts"
+    }
+  },
+  "files": [
+    "./dist"
+  ],
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.6",
+    "@microsoft/api-extractor": "^7.53.1",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-typescript": "^12.1.4",
+    "@types/bun": "latest",
+    "@types/web": "^0.0.276",
+    "ajv": "^8.17.1",
+    "bun": "^1.2.23",
+    "rollup": "^4.52.4",
+    "rollup-plugin-dts": "^6.2.3",
+    "tslib": "^2.8.1"
+  },
+  "peerDependencies": {
+    "rimraf": "^6.0.1",
+    "tsc-alias": "^1.8.16",
+    "typescript": "^5"
+  }
+}
