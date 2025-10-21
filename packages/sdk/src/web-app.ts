@@ -1,5 +1,5 @@
-import type { IWebApp } from '@/types'
-import { getOriginWebApp } from '@/utils'
+import type { IWebApp } from './types'
+import { getOriginWebApp } from './utils'
 
 /**
  * A unified lazy proxy that provides typed, dynamic access to the Telegram WebApp API.

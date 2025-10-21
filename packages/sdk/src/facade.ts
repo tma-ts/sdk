@@ -1,4 +1,4 @@
-import { BackButton, CloudStorage, DeviceStorage, MainButton, SecondaryButton, SecureStorage, SettingsButton } from '@/web-app'
+import { BackButton, CloudStorage, DeviceStorage, MainButton, SecondaryButton, SecureStorage, SettingsButton } from './web-app'
 
 // Settings Button
 export const onSettingsButtonClick = SettingsButton.onClick

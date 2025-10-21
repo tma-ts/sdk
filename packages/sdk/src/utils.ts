@@ -1,4 +1,4 @@
-import type { IWebApp } from '@/types'
+import type { IWebApp } from './types'
 
 /**
  * Custom error indicating that the Telegram WebApp instance is not available.
