@@ -105,5 +105,3 @@ Feel free to open issues or PRs for missing typings or new Telegram Mini App API
 ## License
 
 MIT © Andrey Reznik
-
-Let me know if you’d like a shorter version or additional sections (changelog, FAQ, badges, etc.).
