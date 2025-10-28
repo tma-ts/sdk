@@ -3,26 +3,31 @@ import { getOriginWebApp } from './utils'
 
 /**
  * A unified lazy proxy that provides typed, dynamic access to the Telegram WebApp API.
- * The proxy automatically resolves the WebApp instance at runtime.
+ *
+ * @remarks
+ * - The proxy resolves the underlying `Telegram.WebApp` instance at call-time.
+ * - No side-effects are introduced: it neither initializes nor mutates the WebApp by itself.
+ * - In non-Telegram environments, property access will throw a `TelegramWebAppUnavailableError`
+ *   via `getOriginWebApp()`, which is intentional for clear failure signaling.
  */
 export const WebApp = new Proxy({} as IWebApp, {
-  get(_t, prop) {
+  get(_t, prop: keyof IWebApp | string) {
     const target = getOriginWebApp() as any
     const value = target[prop]
     return typeof value === 'function' ? value.bind(target) : value
   },
-  set(_t, prop, value) {
+  set(_t, prop: keyof IWebApp | string, value: unknown) {
     ;(getOriginWebApp() as any)[prop] = value
     return true
   },
-  has(_t, prop) {
+  has(_t, prop: keyof IWebApp | string) {
     return prop in getOriginWebApp()
   },
   ownKeys() {
     return Reflect.ownKeys(getOriginWebApp())
   },
-  getOwnPropertyDescriptor(_t, prop) {
-    const desc = Object.getOwnPropertyDescriptor(getOriginWebApp(), prop)
+  getOwnPropertyDescriptor(_t, prop: keyof IWebApp | string) {
+    const desc = Object.getOwnPropertyDescriptor(getOriginWebApp(), prop as any)
     return desc ? { ...desc, configurable: true, enumerable: true } : undefined
   }
 }) as IWebApp

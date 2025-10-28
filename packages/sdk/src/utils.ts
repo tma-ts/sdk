@@ -2,46 +2,51 @@ import type { IWebApp } from './types'
 
 /**
  * Custom error indicating that the Telegram WebApp instance is not available.
+ * This error is thrown when the code runs outside Telegram WebView or the SDK isn't initialized.
  */
 export class TelegramWebAppUnavailableError extends Error {
   name = 'TelegramWebAppUnavailableError'
-
-  constructor(message = 'Telegram.WebApp is unavailable. Run the code inside Telegram WebView or initialize the SDK earlier (or inject a mock).') {
+  constructor(message = 'Telegram.WebApp is unavailable. Run inside a Telegram WebView or inject a mock during tests.') {
     super(message)
   }
 }
 
-/**
- * Internal reference for an injected source (useful for testing or mocking)
- */
-const injectedSource: IWebApp | null = null
+let _cachedWebApp: IWebApp | undefined
 
 /**
- * Resolves the global object in different environments.
- * Returns `globalThis`, `window`, or `undefined` if none is available.
+ * Resolves the global object across environments (browser, workers, SSR).
+ * Returns `globalThis` if available, otherwise `undefined`.
  */
 export function resolveGlobal(): any {
-  if (typeof globalThis !== 'undefined') return (globalThis as any).window ?? globalThis
+  if (typeof globalThis !== 'undefined') {
+    return (globalThis as any).window ?? globalThis
+  }
   return undefined
 }
 
 /**
- * Attempts to retrieve the Telegram WebApp source.
- * Throws an error if the WebApp instance is unavailable.
+ * Returns the origin Telegram WebApp instance.
+ * Throws TelegramWebAppUnavailableError when not available.
  */
 export function getOriginWebApp(): IWebApp {
-  if (injectedSource) return injectedSource
+  if (_cachedWebApp) return _cachedWebApp
   const g = resolveGlobal()
-  const impl: IWebApp | undefined = g?.Telegram?.WebApp ?? (typeof window !== 'undefined' ? (window as any).Telegram?.WebApp : undefined)
-  if (!impl) throw new TelegramWebAppUnavailableError()
-  return impl
+  const instance: IWebApp | undefined = g?.Telegram?.WebApp ?? (typeof g?.window !== 'undefined' ? (g.window as any)?.Telegram?.WebApp : undefined)
+  if (!instance) throw new TelegramWebAppUnavailableError()
+  _cachedWebApp = instance
+  return instance
 }
 
 /**
- * Asynchronously checks whether the Telegram WebApp instance is available within a given timeout.
- * @param timeoutMs Maximum time to wait for the WebApp instance (default: 1000 ms).
- * @param intervalMs Interval between checks (default: 50 ms).
- * @returns A promise resolving to `true` if the WebApp is available, otherwise `false`.
+ * Asynchronously checks whether the Telegram WebApp instance becomes available within a timeout.
+ *
+ * @param timeoutMs Maximum time to wait for availability (default: 1000 ms).
+ * @param intervalMs Polling interval (default: 50 ms).
+ * @returns Promise resolving to `true` if available within the timeout, otherwise `false`.
+ *
+ * @remarks
+ * This function does not trigger any side-effects in the WebApp environment.
+ * It is safe to call during application bootstrap or feature detection.
  */
 export function isTMA(timeoutMs = 1000, intervalMs = 50): Promise<boolean> {
   return new Promise((resolve) => {
@@ -50,16 +55,25 @@ export function isTMA(timeoutMs = 1000, intervalMs = 50): Promise<boolean> {
     const check = () => {
       try {
         const originWebApp = getOriginWebApp()
-        clearInterval(timer)
-        resolve(!!originWebApp?.initData)
-      } catch {
-        if (Date.now() - start >= timeoutMs) {
-          clearInterval(timer)
-          resolve(false)
+        if (originWebApp && originWebApp?.initData !== undefined) {
+          cleanup()
+          resolve(true)
+          return
         }
+      } catch {
+        // ignore; fall through to timeout logic
+      }
+      if (Date.now() - start >= timeoutMs) {
+        cleanup()
+        resolve(false)
       }
     }
+
     const timer = setInterval(check, intervalMs)
+
+    function cleanup() {
+      clearInterval(timer)
+    }
     check()
   })
 }
