@@ -1,6 +1,6 @@
 {
   "name": "@tma-ts/react-sdk",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "private": false,
   "type": "module",
   "scripts": {
@@ -9,13 +9,13 @@
     "format-and-lint": "biome check .",
     "format-and-lint:fix": "biome check . --write"
   },
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
     }
   },
   "files": [
@@ -23,7 +23,6 @@
   ],
   "devDependencies": {
     "@tma-ts/sdk": "*",
-    "@tma-ts/typescript-config": "*",
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
