@@ -1,6 +1,6 @@
 {
   "name": "@tma-ts/react-sdk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "type": "module",
   "scripts": {
@@ -18,6 +18,9 @@
       "default": "./dist/index.js"
     }
   },
+  "files": [
+    "./dist"
+  ],
   "devDependencies": {
     "@tma-ts/sdk": "*",
     "@tma-ts/typescript-config": "*",
