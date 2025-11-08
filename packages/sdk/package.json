@@ -1,6 +1,6 @@
 {
   "name": "@tma-ts/sdk",
-  "version": "9.1.12",
+  "version": "9.1.13",
   "private": false,
   "type": "module",
   "description": "TypeScript SDK that removes the friction of integrating Telegram Mini Apps",
@@ -23,7 +23,7 @@
   "license": "MIT",
   "author": "Andrey Reznik",
   "scripts": {
-    "build": "rimraf ./dist && tsup src/index.ts --format esm --dts",
+    "build": "tsdown",
     "prepublishOnly": "bun run build",
     "format-and-lint": "biome check .",
     "format-and-lint:fix": "biome check . --write"
@@ -44,11 +44,15 @@
     "@biomejs/biome": "^2.2.6",
     "@types/bun": "latest",
     "@types/web": "^0.0.276",
-    "bun": "^1.2.23"
+    "bun": "^1.2.23",
+    "tsdown": "^0.16.1"
   },
   "peerDependencies": {
     "rimraf": "^6.0.1",
     "tsc-alias": "^1.8.16",
     "typescript": "^5"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
